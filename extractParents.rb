@@ -2,15 +2,29 @@ class Extract_parents
 	$not_a_merge_sha = ''
 
 	def extract(pathProject, commit)
-		i = 1
+		i = 0
 		parents = []
+		text = ""
 		parents.push(checkMerge(pathProject, commit))
-		while(parents.length < 100)
+		while(parents.length < 1000)
 			puts parents.length
 				parents.push(checkMerge(pathProject, $not_a_merge_sha))
 		end
-		puts parents
+		while (i < parents.length)
+			if parents[i] != []
+				text = text + "########################################\n"
+				text = text + parents[i][0] + "\n" + parents[i][1] + "\n" + parents[i][2] + "\n"
+			end
+			i = i + 1
+		end
+		write_on_file(text, "/home/ess/taes-crystal/MergesLocalSupport")
 	end 
+
+  def write_on_file(text, path)
+    File.open("#{path}", 'a') do |f|
+      f.write text
+    end
+  end
 
 	def makeCheckout(pathProject, commit)
 		Dir.chdir pathProject.to_s
@@ -52,4 +66,4 @@ class Extract_parents
 
 end
 
-Extract_parents.new.extract("/home/ess/test-analyser/LocalSupport", "fd64659f31b7f9e8ab6c01d0ef5c4461c2027875")
+Extract_parents.new.extract("/home/ess/taes-crystal/LocalSupport", "fd64659f31b7f9e8ab6c01d0ef5c4461c2027875")
